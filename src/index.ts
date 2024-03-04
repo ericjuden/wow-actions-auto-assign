@@ -24,17 +24,22 @@ async function run() {
       core.debug(`inputs: \n${JSON.stringify(inputs, null, 2)}`)
 
       if (pr && pr.draft && inputs.skipDraft !== false) {
-        return util.skip('is draft')
+        core.debug('pr is draft. Stopping execution.');
+        return util.skip('is draft');
       }
 
       if (
         inputs.skipKeywords &&
         util.hasSkipKeywords(payload.title, inputs.skipKeywords)
       ) {
-        return util.skip('title includes skip-keywords')
+        core.debug('title includes skip-keywords. Stopping execution.');
+        return util.skip('title includes skip-keywords');
       }
 
-      const octokit = util.getOctokit()
+      console.debug('retrieving octokit object');
+      const octokit = util.getOctokit();
+
+      console.debug('checking for any includeLabels or excludeLabels');
       const checkIncludings =
         inputs.includeLabels && inputs.includeLabels.length > 0
       const checkExcludings =
@@ -46,6 +51,7 @@ async function run() {
         if (checkIncludings) {
           const any = hasAny(inputs.includeLabels)
           if (!any) {
+            core.debug('is not labeled with any of the "includeLabels". Stopping execution.');
             return util.skip(`is not labeled with any of the "includeLabels"`)
           }
         }
@@ -53,11 +59,13 @@ async function run() {
         if (checkExcludings) {
           const any = hasAny(inputs.excludeLabels)
           if (any) {
+            core.debug('is labeled with one of the "excludeLabels". Stopping execution.');
             return util.skip(`is labeled with one of the "excludeLabels"`)
           }
         }
       }
 
+      console.debug('checking for any existing assignees, teams or reviewers');
       const { assignees, teams, reviewers } = await util.getState(octokit);
       core.debug(`assignees: \n${JSON.stringify(assignees, null, 2)}`);
       core.debug(`teams: \n${JSON.stringify(teams, null, 2)}`);

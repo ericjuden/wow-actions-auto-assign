@@ -1,7 +1,7 @@
 {
   "name": "auto-assign",
   "description": "Automatically add reviewers/assignees to issues/PRs",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "main": "dist/index.js",
   "repository": "https://github.com/ericjuden/wow-actions-auto-assign",
   "files": [
