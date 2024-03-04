@@ -58,7 +58,10 @@ async function run() {
         }
       }
 
-      const { assignees, teams, reviewers } = await util.getState(octokit)
+      const { assignees, teams, reviewers } = await util.getState(octokit);
+      core.debug(`assignees: \n${JSON.stringify(assignees, null, 2)}`);
+      core.debug(`teams: \n${JSON.stringify(teams, null, 2)}`);
+      core.debug(`reviewers: \n${JSON.stringify(reviewers, null, 2)}`);
       if (teams.length || reviewers.length) {
         const s = (len: number) => (len > 1 ? 's' : '')
         const logTeams = `team_reviewer${s(teams.length)} "${teams.join(', ')}"`
@@ -74,12 +77,14 @@ async function run() {
           util.skip(`has requested ${logReviewers}`)
         }
       } else {
-        await util.addReviewers(octokit, inputs)
+        core.debug(`adding reviewers from inputs`);
+        await util.addReviewers(octokit, inputs);
       }
 
       if (assignees.length) {
         util.skip(`has assigned to ${assignees.join(', ')}`)
       } else {
+        core.debug(`adding assignees from inputs`);
         await util.addAssignees(octokit, inputs)
       }
     }

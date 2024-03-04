@@ -148,11 +148,16 @@ function chooseReviewers(
 
 export async function addReviewers(octokit: Octokit, inputs: Inputs) {
   const pr = github.context.payload.pull_request
-  if (!inputs.addReviewers || !pr) {
-    return
+  if (!inputs.addReviewers) {
+    core.debug(`addReviewers is not set. Stopping execution.`);
+    return;
   }
 
-  core.info('')
+  if(!pr){
+    core.debug(`This is not a PR. Stopping execution.`);
+    return;
+  }
+
   core.info(`Adding reviewers for pr #[${pr.number}]`)
   const owner = pr.user.login
   const { reviewers: candidates, teamReviewers } = chooseReviewers(
