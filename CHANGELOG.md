@@ -1,3 +1,7 @@
+## [3.0.5] (https://github.com/ericjuden/wow-actions-auto-assign/compare/v3.0.4...v3.0.5) (2024-03-04)
+
+* Added some additional logging to track down reviewer issues.
+
 ## [3.0.4] (https://github.com/ericjuden/wow-actions-auto-assign/compare/v3.0.3...v3.0.4) (2024-03-01)
 
 * Updated to use Node.JS v20
