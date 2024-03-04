@@ -20,9 +20,15 @@ async function run() {
         util.isValidEvent('pull_request', actions) ||
         util.isValidEvent('pull_request_target', actions))
     ) {
-      const inputs = getInputs()
-      core.debug(`inputs: \n${JSON.stringify(inputs, null, 2)}`)
-
+      const inputs = getInputs();
+      core.debug(`inputs: \n${JSON.stringify(inputs, null, 2)}`);
+      if(pr){
+        core.debug(`pr: \n${JSON.stringify(pr, null, 2)}`);
+      }
+      if(issue){
+        core.debug(`issue: \n${JSON.stringify(issue, null, 2)}`);
+      }
+      
       if (pr && pr.draft && inputs.skipDraft !== false) {
         core.debug('pr is draft. Stopping execution.');
         return util.skip('is draft');

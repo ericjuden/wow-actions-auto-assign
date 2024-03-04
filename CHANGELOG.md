@@ -1,3 +1,7 @@
+## [3.0.7] (https://github.com/ericjuden/wow-actions-auto-assign/compare/v3.0.6...v3.0.7) (2024-03-04)
+
+* Added further logging to track down reviewer issues.
+
 ## [3.0.6] (https://github.com/ericjuden/wow-actions-auto-assign/compare/v3.0.5...v3.0.6) (2024-03-04)
 
 * Added further logging to track down reviewer issues.
