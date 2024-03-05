@@ -1,3 +1,7 @@
+## [3.0.9] (https://github.com/ericjuden/wow-actions-auto-assign/compare/v3.0.8...v3.0.9) (2024-03-05)
+
+* Added further logging to track down reviewer issues.
+
 ## [3.0.8] (https://github.com/ericjuden/wow-actions-auto-assign/compare/v3.0.7...v3.0.8) (2024-03-05)
 
 * Replacing @wow-actions/parse-inputs with a fork that adds some basic debug logging (@ericjuden/wow-actions-parse-inputs)

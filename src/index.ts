@@ -20,32 +20,32 @@ async function run() {
         util.isValidEvent('pull_request', actions) ||
         util.isValidEvent('pull_request_target', actions))
     ) {
-      const inputs = getInputs();
-      core.debug(`inputs: \n${JSON.stringify(inputs, null, 2)}`);
-      if(pr){
-        core.debug(`pr: \n${JSON.stringify(pr, null, 2)}`);
+      const inputs = getInputs()
+      core.debug(`inputs: \n${JSON.stringify(inputs, null, 2)}`)
+      if (pr) {
+        core.debug(`pr: \n${JSON.stringify(pr, null, 2)}`)
       }
-      if(issue){
-        core.debug(`issue: \n${JSON.stringify(issue, null, 2)}`);
+      if (issue) {
+        core.debug(`issue: \n${JSON.stringify(issue, null, 2)}`)
       }
-      
+
       if (pr && pr.draft && inputs.skipDraft !== false) {
-        core.debug('pr is draft. Stopping execution.');
-        return util.skip('is draft');
+        core.debug('pr is draft. Stopping execution.')
+        return util.skip('is draft')
       }
 
       if (
         inputs.skipKeywords &&
         util.hasSkipKeywords(payload.title, inputs.skipKeywords)
       ) {
-        core.debug('title includes skip-keywords. Stopping execution.');
-        return util.skip('title includes skip-keywords');
+        core.debug('title includes skip-keywords. Stopping execution.')
+        return util.skip('title includes skip-keywords')
       }
 
-      console.debug('retrieving octokit object');
-      const octokit = util.getOctokit();
+      core.debug('retrieving octokit object')
+      const octokit = util.getOctokit()
 
-      console.debug('checking for any includeLabels or excludeLabels');
+      core.debug('checking for any includeLabels or excludeLabels')
       const checkIncludings =
         inputs.includeLabels && inputs.includeLabels.length > 0
       const checkExcludings =
@@ -57,7 +57,9 @@ async function run() {
         if (checkIncludings) {
           const any = hasAny(inputs.includeLabels)
           if (!any) {
-            core.debug('is not labeled with any of the "includeLabels". Stopping execution.');
+            core.debug(
+              'is not labeled with any of the "includeLabels". Stopping execution.',
+            )
             return util.skip(`is not labeled with any of the "includeLabels"`)
           }
         }
@@ -65,17 +67,19 @@ async function run() {
         if (checkExcludings) {
           const any = hasAny(inputs.excludeLabels)
           if (any) {
-            core.debug('is labeled with one of the "excludeLabels". Stopping execution.');
+            core.debug(
+              'is labeled with one of the "excludeLabels". Stopping execution.',
+            )
             return util.skip(`is labeled with one of the "excludeLabels"`)
           }
         }
       }
 
-      console.debug('checking for any existing assignees, teams or reviewers');
-      const { assignees, teams, reviewers } = await util.getState(octokit);
-      core.debug(`assignees: \n${JSON.stringify(assignees, null, 2)}`);
-      core.debug(`teams: \n${JSON.stringify(teams, null, 2)}`);
-      core.debug(`reviewers: \n${JSON.stringify(reviewers, null, 2)}`);
+      core.debug('checking for any existing assignees, teams or reviewers')
+      const { assignees, teams, reviewers } = await util.getState(octokit)
+      core.debug(`assignees: \n${JSON.stringify(assignees, null, 2)}`)
+      core.debug(`teams: \n${JSON.stringify(teams, null, 2)}`)
+      core.debug(`reviewers: \n${JSON.stringify(reviewers, null, 2)}`)
       if (teams.length || reviewers.length) {
         const s = (len: number) => (len > 1 ? 's' : '')
         const logTeams = `team_reviewer${s(teams.length)} "${teams.join(', ')}"`
@@ -91,18 +95,19 @@ async function run() {
           util.skip(`has requested ${logReviewers}`)
         }
       } else {
-        core.debug(`adding reviewers from inputs`);
-        await util.addReviewers(octokit, inputs);
+        core.debug(`adding reviewers from inputs`)
+        await util.addReviewers(octokit, inputs)
       }
 
       if (assignees.length) {
         util.skip(`has assigned to ${assignees.join(', ')}`)
       } else {
-        core.debug(`adding assignees from inputs`);
+        core.debug(`adding assignees from inputs`)
         await util.addAssignees(octokit, inputs)
       }
     }
   } catch (e) {
+    core.debug(`An error has occurred: ${e.message}`)
     core.error(e)
     core.setFailed(e.message)
   }
